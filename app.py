@@ -16,7 +16,7 @@ st.set_page_config(
 if "registros_portaria" not in st.session_state:
     st.session_state["registros_portaria"] = []
 
-# CSS Customizado com suporte otimizado para Impressão/PDF
+# CSS Customizado com suporte rigoroso para Impressão/PDF limpo (Fundo Branco)
 st.markdown("""
     <style>
     /* Ocultar elementos padrão do Streamlit */
@@ -31,7 +31,7 @@ st.markdown("""
         color: #FFFFFF;
     }
 
-    /* Barra Superior no Ecra */
+    /* Barra Superior no Ecrã */
     .brand-bar {
         display: flex;
         justify-content: space-between;
@@ -57,7 +57,7 @@ st.markdown("""
         font-weight: 600;
     }
 
-    /* Estilização dos inputs no ecra */
+    /* Estilização dos inputs no ecrã */
     .stTextInput input, .stSelectbox div[data-baseweb="select"] {
         background-color: #FFFFFF !important;
         color: #1E293B !important;
@@ -77,10 +77,17 @@ st.markdown("""
     }
 
     /* ==========================================================================
-       REGRAS DE IMPRESSÃO (PDF / IMPRESSORA) - ECONOMIA DE TINTA E ESTILO LIMPO
+       REGRAS DE IMPRESSÃO (PDF / IMPRESSORA) - FUNDO BRANCO E SEM EMOJI
        ========================================================================== */
     @media print {
-        /* Ocultar formulários, botões, barras e navegações */
+        /* Forçar fundo branco e remover fundos escuros do Streamlit */
+        html, body, [data-testid="stAppViewContainer"], .stApp, [data-testid="stHeader"], [data-testid="stToolbar"] {
+            background: #FFFFFF !important;
+            background-image: none !important;
+            color: #000000 !important;
+        }
+
+        /* Esconder formulários, botões, abas, barras e o título principal com emoji de carro */
         [data-testid="stSidebar"], 
         .stButton, 
         .stForm, 
@@ -89,14 +96,10 @@ st.markdown("""
         button, 
         header, 
         footer,
-        .brand-bar {
+        .brand-bar,
+        .stTabs,
+        .hide-on-print {
             display: none !important;
-        }
-
-        /* Fundo limpo e texto escuro */
-        .stApp {
-            background: #FFFFFF !important;
-            color: #000000 !important;
         }
 
         /* Mostrar cabeçalho institucional limpo */
@@ -105,13 +108,13 @@ st.markdown("""
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #000;
-            padding-bottom: 15px;
+            padding-bottom: 12px;
             margin-bottom: 20px;
         }
 
         .print-header img {
-            max-height: 80px;
-            filter: grayscale(100%); /* Opcional: converte logo para PB se preferir */
+            max-height: 70px;
+            filter: grayscale(100%);
         }
 
         .print-header-text {
@@ -121,13 +124,14 @@ st.markdown("""
 
         .print-header-text h2 {
             margin: 0;
-            font-size: 20px;
+            font-size: 18px;
             color: #000 !important;
+            font-weight: bold;
         }
 
         .print-header-text p {
             margin: 2px 0 0 0;
-            font-size: 12px;
+            font-size: 11px;
             color: #333 !important;
         }
 
@@ -136,28 +140,32 @@ st.markdown("""
             text-shadow: none !important;
         }
 
-        /* Ajustes de tabelas para impressão */
-        table {
+        /* Estilização da Tabela de Dados na Impressão */
+        [data-testid="stDataFrame"], table {
+            background-color: #FFFFFF !important;
+            color: #000000 !important;
             border-collapse: collapse !important;
             width: 100% !important;
         }
 
         th, td {
-            border: 1px solid #666 !important;
-            padding: 8px !important;
-            font-size: 11px !important;
-            color: #000 !important;
+            border: 1px solid #333333 !important;
+            padding: 6px 8px !important;
+            font-size: 10px !important;
+            color: #000000 !important;
+            background-color: #FFFFFF !important;
         }
 
         th {
-            background-color: #f0f0f0 !important;
+            background-color: #E5E7EB !important;
             font-weight: bold !important;
+            text-align: left !important;
         }
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Cabeçalho na Tela
+# Cabeçalho na Tela (Painel de Cadastro)
 st.markdown(f"""
     <div class="brand-bar">
         <img src="{LOGO_URL}" class="brand-logo" alt="Grupo Status">
@@ -165,7 +173,7 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# Cabeçalho exclusivo para Impressão/PDF
+# Cabeçalho exclusivo para Impressão/PDF (Fundo Branco Limpo)
 agora_fmt = datetime.datetime.now().strftime("%d/%m/%Y às %H:%M")
 st.markdown(f"""
     <div class="print-header">
@@ -178,8 +186,9 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-st.title("🚗 Controle de Portaria - Entrada e Saída")
-st.markdown("---")
+# Título principal (Classe 'hide-on-print' garante que o emoji de carro NÃO sai na impressão)
+st.markdown('<h1 class="hide-on-print">🚗 Controle de Portaria - Entrada e Saída</h1>', unsafe_allow_html=True)
+st.markdown('<hr class="hide-on-print">', unsafe_allow_html=True)
 
 tab1, tab2 = st.tabs(["📝 Nova Entrada", "🚪 Registrar Saída"])
 
@@ -247,9 +256,9 @@ with tab2:
             st.success(f"✅ Saída registrada com sucesso às {hora_saida}!")
             st.rerun()
     else:
-        st.info("Nenhum veículo/visitante com entrada pendente de saída no momento.")
+        st.info("Nenum veículo/visitante com entrada pendente de saída no momento.")
 
-st.markdown("---")
+st.markdown('<hr class="hide-on-print">', unsafe_allow_html=True)
 
 # Exibição do Relatório
 st.subheader("📋 Relatório de Movimentações")
