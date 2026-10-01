@@ -2,7 +2,7 @@ import datetime
 import pandas as pd
 import streamlit as st
 
-# URL da Logo do Grupo Status
+# URL da Logo Oficial do Grupo Status
 LOGO_URL = "https://raw.githubusercontent.com/gugaleon036-byte/app-portaria/main/logo.png"
 
 # Configuração da página e ícone da aba
@@ -16,38 +16,38 @@ st.set_page_config(
 if "registros_portaria" not in st.session_state:
     st.session_state["registros_portaria"] = []
 
-# CSS Customizado com suporte rigoroso para Impressão/PDF limpo (Fundo Branco)
-st.markdown("""
+# CSS Customizado (Tela Escura / Impressão 100% Branca com Logo)
+st.markdown(f"""
     <style>
-    /* Ocultar elementos padrão do Streamlit */
-    #MainMenu, footer, header { visibility: hidden; }
+    /* Ocultar elementos nativos do Streamlit */
+    #MainMenu, footer, header {{ visibility: hidden; }}
     
-    .stApp {
+    .stApp {{
         background: linear-gradient(rgba(0, 28, 56, 0.70), rgba(0, 28, 56, 0.85)), 
                     url("https://raw.githubusercontent.com/gugaleon036-byte/app-portaria/main/fundo.jpg");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
         color: #FFFFFF;
-    }
+    }}
 
-    /* Barra Superior no Ecrã */
-    .brand-bar {
+    /* Barra Superior de Identificação no Ecrã */
+    .brand-bar {{
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 10px 0 20px 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         margin-bottom: 20px;
-    }
+    }}
 
-    .brand-logo {
+    .brand-logo {{
         height: 100px;
         width: auto;
         object-fit: contain;
-    }
+    }}
 
-    .portal-tag {
+    .portal-tag {{
         background-color: rgba(255, 255, 255, 0.15);
         border: 1px solid #FFFFFF;
         color: #FFFFFF;
@@ -55,39 +55,39 @@ st.markdown("""
         border-radius: 20px;
         font-size: 13px;
         font-weight: 600;
-    }
+    }}
 
-    /* Estilização dos inputs no ecrã */
-    .stTextInput input, .stSelectbox div[data-baseweb="select"] {
+    /* Estilização dos campos de input no ecrã */
+    .stTextInput input, .stSelectbox div[data-baseweb="select"] {{
         background-color: #FFFFFF !important;
         color: #1E293B !important;
         border-radius: 8px !important;
         font-weight: 600 !important;
-    }
+    }}
 
-    .stTextInput > label, .stSelectbox > label {
+    .stTextInput > label, .stSelectbox > label {{
         color: #FFFFFF !important;
         font-size: 14px !important;
         font-weight: 600 !important;
-    }
+    }}
 
-    /* Ocultar cabeçalho exclusivo de impressão no ecrã */
-    .print-header {
+    /* Elementos ocultos no ecrã e visíveis apenas ao imprimir */
+    .print-only {{
         display: none;
-    }
+    }}
 
     /* ==========================================================================
-       REGRAS DE IMPRESSÃO (PDF / IMPRESSORA) - FUNDO BRANCO E SEM EMOJI
+       REGRAS RIGOROSAS DE IMPRESSÃO - FUNDO BRANCO / ECONOMIA DE TINTA
        ========================================================================== */
-    @media print {
-        /* Forçar fundo branco e remover fundos escuros do Streamlit */
-        html, body, [data-testid="stAppViewContainer"], .stApp, [data-testid="stHeader"], [data-testid="stToolbar"] {
+    @media print {{
+        /* Ocultar toda a interface dinâmica do Streamlit */
+        html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"], [data-testid="stToolbar"] {{
             background: #FFFFFF !important;
+            background-color: #FFFFFF !important;
             background-image: none !important;
             color: #000000 !important;
-        }
+        }}
 
-        /* Esconder formulários, botões, abas, barras e o título principal com emoji de carro */
         [data-testid="stSidebar"], 
         .stButton, 
         .stForm, 
@@ -98,74 +98,75 @@ st.markdown("""
         footer,
         .brand-bar,
         .stTabs,
-        .hide-on-print {
+        .hide-on-print,
+        [data-testid="stDataFrame"] {{
             display: none !important;
-        }
+        }}
 
-        /* Mostrar cabeçalho institucional limpo */
-        .print-header {
-            display: flex !important;
+        /* Tornar visível o bloco HTML exclusivo de impressão */
+        .print-only {{
+            display: block !important;
+            width: 100% !important;
+            background-color: #FFFFFF !important;
+            color: #000000 !important;
+        }}
+
+        .print-header-container {{
+            display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #000;
+            border-bottom: 2px solid #000000;
             padding-bottom: 12px;
             margin-bottom: 20px;
-        }
+        }}
 
-        .print-header img {
-            max-height: 70px;
-            filter: grayscale(100%);
-        }
+        .print-logo {{
+            height: 70px;
+            width: auto;
+        }}
 
-        .print-header-text {
+        .print-title-box {{
             text-align: right;
-            color: #000;
-        }
+        }}
 
-        .print-header-text h2 {
+        .print-title-box h2 {{
             margin: 0;
             font-size: 18px;
-            color: #000 !important;
             font-weight: bold;
-        }
-
-        .print-header-text p {
-            margin: 2px 0 0 0;
-            font-size: 11px;
-            color: #333 !important;
-        }
-
-        h1, h2, h3, h4, span, div, p, td, th {
             color: #000000 !important;
-            text-shadow: none !important;
-        }
+        }}
 
-        /* Estilização da Tabela de Dados na Impressão */
-        [data-testid="stDataFrame"], table {
-            background-color: #FFFFFF !important;
-            color: #000000 !important;
-            border-collapse: collapse !important;
-            width: 100% !important;
-        }
+        .print-title-box p {{
+            margin: 3px 0 0 0;
+            font-size: 12px;
+            color: #333333 !important;
+        }}
 
-        th, td {
-            border: 1px solid #333333 !important;
-            padding: 6px 8px !important;
-            font-size: 10px !important;
+        /* Tabela de Impressão HTML Nativa */
+        table.print-table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }}
+
+        table.print-table th, table.print-table td {{
+            border: 1px solid #000000;
+            padding: 6px 8px;
+            font-size: 10px;
+            text-align: left;
             color: #000000 !important;
             background-color: #FFFFFF !important;
-        }
+        }}
 
-        th {
-            background-color: #E5E7EB !important;
-            font-weight: bold !important;
-            text-align: left !important;
-        }
-    }
+        table.print-table th {{
+            background-color: #F0F0F0 !important;
+            font-weight: bold;
+        }}
+    }}
     </style>
 """, unsafe_allow_html=True)
 
-# Cabeçalho na Tela (Painel de Cadastro)
+# Cabeçalho na Tela (Painel Web)
 st.markdown(f"""
     <div class="brand-bar">
         <img src="{LOGO_URL}" class="brand-logo" alt="Grupo Status">
@@ -173,20 +174,7 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# Cabeçalho exclusivo para Impressão/PDF (Fundo Branco Limpo)
-agora_fmt = datetime.datetime.now().strftime("%d/%m/%Y às %H:%M")
-st.markdown(f"""
-    <div class="print-header">
-        <img src="{LOGO_URL}" alt="Logo">
-        <div class="print-header-text">
-            <h2>RELATÓRIO DE CONTROLE DE PORTARIA</h2>
-            <p><strong>Empreendimento:</strong> Bougainville Belém</p>
-            <p><strong>Gerado em:</strong> {agora_fmt}</p>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
-
-# Título principal (Classe 'hide-on-print' garante que o emoji de carro NÃO sai na impressão)
+# Título principal do Painel (Oculto na impressão para remover o emoji de carro)
 st.markdown('<h1 class="hide-on-print">🚗 Controle de Portaria - Entrada e Saída</h1>', unsafe_allow_html=True)
 st.markdown('<hr class="hide-on-print">', unsafe_allow_html=True)
 
@@ -256,7 +244,7 @@ with tab2:
             st.success(f"✅ Saída registrada com sucesso às {hora_saida}!")
             st.rerun()
     else:
-        st.info("Nenum veículo/visitante com entrada pendente de saída no momento.")
+        st.info("Nenhum veículo/visitante com entrada pendente de saída no momento.")
 
 st.markdown('<hr class="hide-on-print">', unsafe_allow_html=True)
 
@@ -266,7 +254,7 @@ st.subheader("📋 Relatório de Movimentações")
 if st.session_state["registros_portaria"]:
     df_registros = pd.DataFrame(st.session_state["registros_portaria"])
     
-    # Reordenar colunas para exibição
+    # Reordenar colunas
     colunas_ordem = [
         "ID", "Data Entrada", "Hora Entrada", "Hora Saída", 
         "Lote/Quadra", "Visitante/Empresa", "Motorista", 
@@ -274,12 +262,71 @@ if st.session_state["registros_portaria"]:
     ]
     df_registros = df_registros[colunas_ordem]
     
+    # Exibição na Tela
     st.dataframe(df_registros, use_container_width=True)
+
+    # --------------------------------------------------------------------------
+    # CONSTRUTOR DO DOCUMENTO DE IMPRESSÃO (FUNDO 100% BRANCO E LOGO STATUS)
+    # --------------------------------------------------------------------------
+    agora_fmt = datetime.datetime.now().strftime("%d/%m/%Y às %H:%M")
+    
+    # Gerar linhas da tabela HTML
+    linhas_html = ""
+    for _, row in df_registros.iterrows():
+        linhas_html += f"""
+        <tr>
+            <td>{row['ID']}</td>
+            <td>{row['Data Entrada']}</td>
+            <td>{row['Hora Entrada']}</td>
+            <td>{row['Hora Saída']}</td>
+            <td>{row['Lote/Quadra']}</td>
+            <td>{row['Visitante/Empresa']}</td>
+            <td>{row['Motorista']}</td>
+            <td>{row['Placa']}</td>
+            <td>{row['Autorizado Por']}</td>
+            <td>{row['Descrição']}</td>
+            <td>{row['Status']}</td>
+        </tr>
+        """
+
+    # Inserção do HTML exclusivo de impressão
+    st.markdown(f"""
+        <div class="print-only">
+            <div class="print-header-container">
+                <img src="{LOGO_URL}" class="print-logo" alt="Grupo Status">
+                <div class="print-title-box">
+                    <h2>RELATÓRIO DE CONTROLE DE PORTARIA</h2>
+                    <p><strong>Empreendimento:</strong> Bougainville Belém</p>
+                    <p><strong>Gerado em:</strong> {agora_fmt}</p>
+                </div>
+            </div>
+            <table class="print-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Entrada</th>
+                        <th>Saída</th>
+                        <th>Lote/Quadra</th>
+                        <th>Visitante/Empresa</th>
+                        <th>Motorista</th>
+                        <th>Placa</th>
+                        <th>Autorizado Por</th>
+                        <th>Descrição</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {linhas_html}
+                </tbody>
+            </table>
+        </div>
+    """, unsafe_allow_html=True)
 
     col_btn1, col_btn2 = st.columns(2)
 
     with col_btn1:
-        # Botão para acionar a janela de impressão
+        # Botão para acionar a impressão
         st.components.v1.html(
             """
             <button onclick="window.parent.print()" style="
@@ -292,7 +339,7 @@ if st.session_state["registros_portaria"]:
                 cursor: pointer;
                 width: 100%;
                 font-size: 15px;
-            ">🖨️ Imprimir / Guardar PDF (Modelo Limpo)</button>
+            ">🖨️ Imprimir / Salvar PDF (Fundo Branco)</button>
             """,
             height=50
         )
